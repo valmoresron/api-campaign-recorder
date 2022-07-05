@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campaign Preview</title>
+
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+        background-color: maroon;
+      }
+
+      .iframe-container {
+        position: relative;
+      }
+
+      /* To be set in JavaScript */
+      /* #my-iframe {
+        width: 1920px;
+        height: 1080px;
+      } */
+
+      #mouse-hide {
+        z-index: 999;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        cursor: none;
+      }
+
+      #log-window {
+        position: absolute;
+        /* left: 1940px; */ /* To be set in javascript */
+        top: 100px;
+        width: 1080px;
+        height: 800px;
+
+        font-family: "Courier New", Courier, monospace;
+        padding: 10px 20px;
+        background-color: black;
+        color: rgb(5, 139, 26);
+        overflow-x: hidden;
+        overflow-y: scroll;
+        margin-left: 20px;
+      }
+
+      #log-window > span {
+        display: block;
+        font-size: 30px;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Everything inside this div will be recorded -->
+    <div class="iframe-container">
+      <iframe src="{{ preview_url }}" frameborder="0" id="my-iframe"></iframe>
+      <div id="mouse-hide"></div>
+    </div>
+
+    <div id="log-window">
+      <!-- Shows useful logs -->
+    </div>
+
+    <!-- ------------------------------------------------------------------------- -->
+
+    <script>
+      var LOG_LINES = 0;
+      var PLAY_COUNT = 0; // For selenium
+      var IFRAME = document.getElementById("my-iframe");
+      var LOG_WINDOW = document.getElementById("log-window");
+
+      function debugLog(message) {
+        const spanElem = document.createElement('span');
+        spanElem.innerText = "[" + ++LOG_LINES + "]" + " " + message
+        LOG_WINDOW.appendChild(spanElem);
+        LOG_WINDOW.scrollTop = LOG_WINDOW.scrollHeight;
+      }
+
+      function initializeIframe() {
+        const width = {{ width }};
+        const height = {{ height }};
+        IFRAME.style.width = width + 'px';
+        IFRAME.style.height = height + 'px';
+        LOG_WINDOW.style.left = (width + 20) + 'px';
+      }
+
+      function overrideIframeLog() {
+        const newConsole = {
+          ...IFRAME.contentWindow.console,
+          log: (...params) => {
+            const message = params[0];
+            if (message.includes('Displaying from')) {
+              window.console.log('BEGIN');
+              window.PLAY_COUNT++;
+              debugLog('BEGIN')
+            } else if (message === 'END OF TEMPLATE') {
+              window.console.log('END');
+              debugLog('END')
+            } else if (message === 'Preview Mode') {
+              window.console.log('BEGIN');
+              window.PLAY_COUNT++;
+              debugLog('BEGIN')
+            }
+          }
+        }
+        IFRAME.contentWindow.console = newConsole;
+      }
+
+      function showInitialDebugMessage() {
+        const messages = [];
+        messages.push("If you can't see any logs, please run on Google Chrome with the following flags:");
+        messages.push("--disable-web-security");
+        messages.push("--user-data-dir=<PATH>")
+        messages.push("--disable-site-isolation-trials");
+        messages.push("ex: google-chrome --disable-web-security --user-data-dir=/tmp/chrome --disable-site-isolation-trials");
+        messages.push("<===================================================>");
+        messages.forEach((message) => { debugLog(message); });
+      }
+    </script>
+
+    <script>
+      function main() {
+        initializeIframe();
+        showInitialDebugMessage();
+        overrideIframeLog();
+      }
+
+      main();
+    </script>
+  </body>
+</html>

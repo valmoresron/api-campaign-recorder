@@ -1,0 +1,9 @@
+{
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["--line-length", "120"],
+  "[python]": {
+    "editor.formatOnSave": false,
+    "editor.tabSize": 4
+  },
+  "editor.tabSize": 2
+}
