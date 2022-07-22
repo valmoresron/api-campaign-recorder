@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download Campaign Demo</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-v4-grid-only@1.0.0/dist/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/css/fabric.min.css" />
+  <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/css/fabric.components.min.css" />
+  <script src="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-js/1.4.0/js/fabric.min.js"></script>
+
+  <style>
+    body {
+      padding-top: 30px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .main-container {
+      padding: 20px;
+      border: 1px solid #a6a6a6;
+      width: 875px;
+    }
+
+    .main-title {
+      font-size: 44px;
+    }
+
+    .ms-Label {
+      font-size: 16px !important;
+      font-weight: normal !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="main-container ms-font-su">
+    <div class="main-title">Download Campaign Demo</div>
+    <br>
+
+
+    <form action="/download-campaign">
+      <div class="row">
+        <div class="col-12">
+          <div class="ms-TextField">
+            <label class="ms-Label">Preview Url</label>
+            <input class="ms-TextField-field" type="url" required name="preview_url" spellcheck="false" autocomplete="false">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4 col-md-2">
+          <div class="ms-TextField">
+            <label class="ms-Label">Width</label>
+            <input class="ms-TextField-field" type="number" value="1920" required min="1" name="width">
+          </div>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-4 col-md-2">
+          <div class="ms-TextField">
+            <label class="ms-Label">Height</label>
+            <input class="ms-TextField-field" type="number" value="1080" required min="1" name="height">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4 col-md-2">
+          <div class="ms-TextField">
+            <label class="ms-Label">Loops</label>
+            <input class="ms-TextField-field" type="number" value="1" required min="1" max="5" name="loops">
+          </div>
+        </div>
+        <div class="col-1"></div>
+        <div class="col-4 col-md-2">
+          <div class="ms-TextField">
+            <label class="ms-Label">Target FPS</label>
+            <input class="ms-TextField-field" type="number" value="30" required min="1" max="500" name="target_fps">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-2">
+          <div class="ms-Toggle">
+            <span class="ms-Toggle-description">Compress Video</span>
+            <input type="checkbox" class="ms-Toggle-input" id="compress-input" name="compress" />
+            <label class="ms-Toggle-field" tabindex="0" id="compress-toggle">
+              <span class="ms-Label ms-Label--off">Off</span>
+              <span class="ms-Label ms-Label--on">On</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-1">
+          <button type="submit" class="ms-Button ms-Button--primary">
+            <span class="ms-Button-label">Download</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <script type="text/javascript">
+    const toggleElements = document.getElementsByClassName("ms-Toggle");
+    for (const toggleElement of toggleElements) {
+      new fabric['Toggle'](toggleElement);
+    }
+
+    let compressChecked = false;
+    const compressInputElement = document.getElementById("compress-input");
+    const compressToggleElement = document.getElementById("compress-toggle");
+    compressToggleElement.addEventListener('click', (event) => {
+      if (compressChecked) {
+        compressInputElement.removeAttribute('checked');
+      } else {
+        compressInputElement.setAttribute('checked', true);
+      }
+      compressChecked = !compressChecked;
+    });
+  </script>
+
+</body>
+
+</html>

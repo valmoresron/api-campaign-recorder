@@ -17,7 +17,12 @@ templates = Jinja2Templates(directory=str(Path(BASE_DIR, "templates")))
 
 @app.get("/")
 def home():
-    return RedirectResponse(url="/docs")
+    return RedirectResponse(url="/demo")
+
+
+@app.get("/demo", response_class=HTMLResponse)
+def demo(request: Request):
+    return templates.TemplateResponse("demo.html", {"request": request})
 
 
 # The recorder will navigate to this page
@@ -34,8 +39,8 @@ def preview_campaign(request: Request, preview_url: str, width: int, height: int
     )
 
 
-@app.get("/download-campaign")
-def download_campaign(request: DownloadCampaignRequestBody) -> FileResponse:
+@app.post("/download-campaign")
+def download_campaign_post(request: DownloadCampaignRequestBody) -> FileResponse:
     preview_url = request.preview_url
     width = request.width
     height = request.height
@@ -43,6 +48,31 @@ def download_campaign(request: DownloadCampaignRequestBody) -> FileResponse:
     target_fps = request.target_fps
     compress = request.compress
 
+    recorder = CampaignRecorder(
+        preview_url=preview_url,
+        width=width,
+        height=height,
+        loops=loops,
+        target_fps=target_fps,
+        compress=compress,
+        timeout=30,
+    )
+
+    filepath = recorder.record()
+    filename = filepath.split("/")[-1]
+
+    return FileResponse(path=filepath, media_type="video/mp4", filename=filename)
+
+
+@app.get("/download-campaign")
+def download_campaign_get(
+    preview_url: str,
+    width: int,
+    height: int,
+    loops: int,
+    target_fps: int,
+    compress: bool = False,
+) -> FileResponse:
     recorder = CampaignRecorder(
         preview_url=preview_url,
         width=width,
