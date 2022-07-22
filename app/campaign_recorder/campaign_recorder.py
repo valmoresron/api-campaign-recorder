@@ -21,7 +21,8 @@ class CampaignRecorder:
         self.preview_url = preview_url
         self.width = width
         self.height = height
-        self.record_height = height + 55  # 55px is for Chrome's infobar;
+        # add some px offset for Chrome's infobar; can't disable even with --disable-infobars flag
+        self.record_height = height + 45
         self.loops = loops
         self.target_fps = target_fps
         self.compress = compress
@@ -42,7 +43,7 @@ class CampaignRecorder:
             "--disable-infobars",
             "--disable-web-security",
             "--disable-notifications",
-            "--app=http://google.com",
+            "--app=http://google.com/robots.txt",
             "--disable-site-isolation-trials",
             f"--window-size={width},{record_height}",
             f"--user-data-dir=/tmp/chrome/{id}",
@@ -62,6 +63,7 @@ class CampaignRecorder:
         [options.add_argument(arg) for arg in chrome_args]
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
+        driver.maximize_window()
         return driver
 
     def __wait_for_playcount_increase(self, driver: webdriver.Chrome, count: int = 1):
