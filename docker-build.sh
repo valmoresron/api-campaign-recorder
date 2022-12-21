@@ -1,1 +1,1 @@
-docker build -t campaign-recorder --file Dockerfile .
+docker build --platform linux/amd64 -t campaign-recorder --file Dockerfile .

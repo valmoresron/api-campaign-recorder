@@ -1,1 +1,1 @@
-docker run -it -p 8000:8000 -v ${pwd}/recordings:/code/recordings campaign-recorder
+docker run -it -p 8000:8000 --platform linux/amd64 -v $(pwd)/recordings:/code/recordings campaign-recorder
