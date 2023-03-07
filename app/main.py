@@ -55,7 +55,6 @@ def download_campaign_post(request: DownloadCampaignRequestBody) -> FileResponse
         loops=loops,
         target_fps=target_fps,
         compress=compress,
-        timeout=30,
     )
 
     filepath = recorder.record()
@@ -80,7 +79,6 @@ def download_campaign_get(
         loops=loops,
         target_fps=target_fps,
         compress=compress,
-        timeout=30,
     )
 
     filepath = recorder.record()

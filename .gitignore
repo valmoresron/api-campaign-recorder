@@ -1,3 +1,5 @@
 *recordings/*.mkv
 *recordings/*.mp4
 *recordings/*.avi
+
+*__pycache__*

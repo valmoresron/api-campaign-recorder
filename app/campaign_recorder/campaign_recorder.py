@@ -14,7 +14,7 @@ class CampaignRecorder:
         loops: int = 1,
         target_fps: int = 24,
         compress: bool = False,
-        timeout: int = 30,
+        timeout: int = 500,
     ) -> None:
         current_date = str(datetime.datetime.now().date())
         self.id = current_date + "-" + uuid.uuid4().hex

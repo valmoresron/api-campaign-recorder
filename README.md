@@ -23,5 +23,11 @@ A python app that can record and download campaigns into videos.
 - Run `./docker-build.sh` to build the image
 - Run `./docker-run.sh` to run the image
 
+# How to run using Docker Compose
+
+- Run `docker-compose up`
+- Run `docker-compose down` to stop
+
 # Notes
+
 Framerate might be choppy if you have a slow hardware

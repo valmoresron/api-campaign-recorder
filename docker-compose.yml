@@ -1,0 +1,8 @@
+services:
+  campaign-recorder:
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/code
+    entrypoint: sh -c "python run.py"
