@@ -3,11 +3,23 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse, HTMLResponse, FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from .campaign_recorder import CampaignRecorder
 from .models.download_campaign_request_body import DownloadCampaignRequestBody
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:4200",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -55,7 +67,7 @@ def download_campaign_post(request: DownloadCampaignRequestBody) -> FileResponse
         loops=loops,
         target_fps=target_fps,
         compress=compress,
-        timeout=30,
+        timeout=300,
     )
 
     filepath = recorder.record()
@@ -80,7 +92,7 @@ def download_campaign_get(
         loops=loops,
         target_fps=target_fps,
         compress=compress,
-        timeout=30,
+        timeout=300,
     )
 
     filepath = recorder.record()
